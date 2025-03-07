@@ -36,11 +36,18 @@ class RandomGenerator(object):
             image, label = random_rot_flip(image, label)
         elif random.random() > 0.5:
             image, label = random_rotate(image, label)
-        x, y = image.shape
+        x, y = image.shape[:2]  # 只获取前两个维度，适用于灰度和彩色图像
         if x != self.output_size[0] or y != self.output_size[1]:
-            image = zoom(image, (self.output_size[0] / x, self.output_size[1] / y), order=3)  # why not 3?
+            image = zoom(image, (self.output_size[0] / x, self.output_size[1] / y) + (1,) * (len(image.shape) - 2), order=3)
             label = zoom(label, (self.output_size[0] / x, self.output_size[1] / y), order=0)
-        image = torch.from_numpy(image.astype(np.float32)).unsqueeze(0)
+        
+        # 检查图像是否为灰度图（2D）或彩色图（3D）
+        if len(image.shape) == 2:  # 灰度图像
+            image = torch.from_numpy(image.astype(np.float32)).unsqueeze(0)  # 添加通道维度
+        else:  # RGB图像
+            # 转置图像从 (H, W, C) 到 (C, H, W)
+            image = torch.from_numpy(image.astype(np.float32).transpose(2, 0, 1))
+        
         label = torch.from_numpy(label.astype(np.float32))
         sample = {'image': image, 'label': label.long()}
         return sample

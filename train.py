@@ -90,12 +90,15 @@ if __name__ == "__main__":
 
     if args.batch_size != 24 and args.batch_size % 6 == 0:
         args.base_lr *= args.batch_size / 24
-    args.num_classes = dataset_config[dataset_name]['num_classes']
-    args.root_path = dataset_config[dataset_name]['root_path']
-    args.list_dir = dataset_config[dataset_name]['list_dir']
+    # args.num_classes = dataset_config[dataset_name]['num_classes']
+    # args.root_path = dataset_config[dataset_name]['root_path']
+    # args.list_dir = dataset_config[dataset_name]['list_dir']
 
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
+
+    print(config)
+    
     net = ViT_seg(config,img_size=args.img_size, num_classes=args.num_classes).cuda()
     #inputs = (torch.randn((10,3,224,224)).cuda(),)
     #with open('model_complexity.txt', 'w') as output:

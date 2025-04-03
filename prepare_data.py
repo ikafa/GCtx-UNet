@@ -95,7 +95,7 @@ def convert_data(input_dir, output_dir, grayscale=False):
             case_names.append(base_name)
 
         # 保存为h5文件，按大小命名
-        output_path = os.path.join(test_dir, f"{size}.h5")
+        output_path = os.path.join(test_dir, f"{size}.npy.h5")
         with h5py.File(output_path, 'w') as f:
             # 创建数据集
             f.create_dataset('image', data=np.array(images))

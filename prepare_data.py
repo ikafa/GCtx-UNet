@@ -98,13 +98,8 @@ def convert_data(input_dir, output_dir, grayscale=False):
         output_path = os.path.join(test_dir, f"{size}.h5")
         with h5py.File(output_path, 'w') as f:
             # 创建数据集
-            f.create_dataset('images', data=np.array(images))
-            f.create_dataset('labels', data=np.array(labels))
-            # 保存文件名作为case_names
-            dt = h5py.special_dtype(vlen=str)
-            case_names_dataset = f.create_dataset('case_names', (len(case_names),), dtype=dt)
-            for i, name in enumerate(case_names):
-                case_names_dataset[i] = name
+            f.create_dataset('image', data=np.array(images))
+            f.create_dataset('label', data=np.array(labels))
 
         print(f"已处理验证图像组 {size}, 包含 {len(filenames)} 张图像")
 
